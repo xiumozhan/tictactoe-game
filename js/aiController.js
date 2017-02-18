@@ -33,7 +33,7 @@ var minimizeScore = function(chessBoard, depth, alpha, beta) {
     if(beta <= alpha) {
         return gameResult;
     }
-    if(depth === 0 || isGameOver || alpha >= beta) {
+    if(depth === 0 || isGameOver) {
         return gameResult;
     }
     var bestPossibleScore = Infinity;
@@ -98,4 +98,11 @@ var oMiniMax = function(chessBoard, depth) {
         index = Math.floor(Math.random() * (index + 1));
     }
     return bestMoves[index];
+};
+
+module.exports = function() {
+    return {
+        firstHandMove: xMiniMax;
+        secondHandMove: oMiniMax;
+    }
 };
