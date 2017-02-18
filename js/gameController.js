@@ -2,6 +2,8 @@
 
 gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', function($scope, gameState, aiController) {
     $scope.chessBoard = new Array(9).fill('empty');
+    var firstHand = 'firstHand';
+    var secondHand = 'secondHand';
     $scope.position = 0;
     $scope.turn;
 
@@ -9,6 +11,8 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
         humanToComputer: false,
         humanToHuman: false
     };
+
+    $scope.isGameModeSelected = false;
 
     $scope.firstHandPlayer = {
         human: false,
@@ -23,14 +27,16 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     $scope.onePlayer = function() {
         $scope.gameMode.humanToComputer = true;
         $scope.gameMode.humanToHuman = false;
+        $scope.isGameModeSelected = true;
     };
 
     $scope.twoPlayer = function() {
         $scope.gameMode.humanToComputer = false;
         $scope.gameMode.humanToHuman = true;
+        $scope.isGameModeSelected = true;
     };
 
-    $scope.selectHand = function() {
+    var selectHand = function() {
         if($scope.selectedHand === 'firstHand') {
             if($scope.gameMode.humanToHuman) {
                 $scope.firstHandPlayer.human = true;
@@ -57,6 +63,16 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
             }
         }
         $scope.turn = 'firstHand';
+    };
+
+    $scope.selectFirstHand = function() {
+        $scope.selectedHand = firstHand;
+        selectedHand();
+    };
+
+    $scope.selectSecondHand = function() {
+        $scope.selectedHand = secondHand;
+        selectHand();
     };
 
     $scope.gameStatus = gameState.resultMap.inProgress;
@@ -142,8 +158,10 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
 
         $scope.chessBoard = new Array(9).fill('empty');
         $scope.turn = undefined;
+        $scope.selectedHand = undefined;
         $scope.gameOver = false;
         $scope.gameStatus = gameState.resultMap.inProgress;
+        $scope.isGameModeSelected = false;
     };
 
 }]);

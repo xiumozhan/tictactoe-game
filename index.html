@@ -12,6 +12,15 @@
 
 <body ng-app="gameApp">
     <div class="container container-fluid" ng-controller="gameController">
+        <div class="game-mode-container">
+            <button class="btn btn-primary" ng-click="onePlayer()">One Player</button>
+            <button class="btn btn-primary" ng-click="twoPlayer()">Two Player</button>
+        </div>
+        <div class="select-hand-container" ng-show="isGameModeSelected">
+            <button class="btn btn-primary" ng-click="selectFirstHand()">X</button>
+            <button class="btn btn-primary" ng-click="selectSecondHand()">O</button>
+            <button class="btn btn-primary" ng-click="reset()">Reset</button>
+        </div>
         <div class="game-board">
 
         </div>
@@ -24,5 +33,7 @@
 <script src="js/gameState.js"></script>
 <script src="js/aiController.js"></script>
 <script src="js/gameController.js"></script>
+<script src="directives/chessBlock.js"></script>
+<script src="directives/chessBlockRow.js"></script>
 
 </html>
