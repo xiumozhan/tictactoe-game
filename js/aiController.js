@@ -100,7 +100,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
     };
 
     return {
-        firstHandMove: xMiniMax;
-        secondHandMove: oMiniMax;
+        firstHandMove: xMiniMax,
+        secondHandMove: oMiniMax
     }
 }]);

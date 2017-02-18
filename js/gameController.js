@@ -1,6 +1,6 @@
 'use strict';
 
-gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', function($scope) {
+gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', function($scope, gameState, aiController) {
     $scope.chessBoard = new Array(9).fill('empty');
     $scope.position = 0;
     $scope.turn;
@@ -43,7 +43,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
                 $scope.secondHandPlayer.human = false;
                 $scope.secondHandPlayer.computer = true;
             }
-        } else($scope.selectedHand === 'secondHand') {
+        } else if ($scope.selectedHand === 'secondHand') {
             if($scope.gameMode.humanToHuman) {
                 $scope.firstHandPlayer.human = true;
                 $scope.firstHandPlayer.computer = false;

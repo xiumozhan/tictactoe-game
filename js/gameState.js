@@ -120,7 +120,7 @@ gameApp.service('gameState', function() {
     };
 
     return {
-        getState: stateEvaluate;
-        resultMap: results;
+        getState: stateEvaluate,
+        resultMap: results
     };
 })
