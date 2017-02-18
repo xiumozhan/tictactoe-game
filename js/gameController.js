@@ -118,8 +118,32 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
         }
     });
 
-    $scope.$watch('gameOver', function() {
-
+    $scope.$watch('gameOver', function(newValue, oldValue) {
+        if(newValue && !oldValue) {
+            $scope.reset();
+        }
     });
+
+    $scope.reset = function() {
+        $scope.gameMode = {
+            humanToComputer: false,
+            humanToHuman: false
+        };
+
+        $scope.firstHandPlayer = {
+            human: false,
+            computer: false
+        };
+
+        $scope.secondHandPlayer = {
+            human: false,
+            computer: false
+        };
+
+        $scope.chessBoard = new Array(9).fill('empty');
+        $scope.turn = undefined;
+        $scope.gameOver = false;
+        $scope.gameStatus = gameState.resultMap.inProgress;
+    };
 
 }]);
