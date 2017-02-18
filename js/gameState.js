@@ -121,5 +121,6 @@ var stateEvaluate = function(chessBoard) {
 module.exports = function() {
     return {
         getState: stateEvaluate;
+        resultMap: results;
     };
 };
