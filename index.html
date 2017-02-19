@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
 
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
@@ -12,17 +12,31 @@
 
 <body ng-app="gameApp">
     <div class="container container-fluid" ng-controller="gameController">
-        <div class="game-mode-container">
-            <button class="btn btn-primary" ng-click="onePlayer()">One Player</button>
-            <button class="btn btn-primary" ng-click="twoPlayer()">Two Player</button>
+        <div class="row" ng-show="!isGameModeSelected">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <div class="game-mode-container text-center">
+                    <button class="btn btn-primary" ng-click="onePlayer()">One Player</button>
+                    <button class="btn btn-primary" ng-click="twoPlayer()">Two Player</button>
+                </div>
+            </div>
+            <div class="col-sm-4"></div>
         </div>
-        <div class="select-hand-container" ng-show="isGameModeSelected">
-            <button class="btn btn-primary" ng-click="selectFirstHand()">X</button>
-            <button class="btn btn-primary" ng-click="selectSecondHand()">O</button>
-            <button class="btn btn-primary" ng-click="reset()">Reset</button>
+        <div class="row" ng-show="isGameModeSelected">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <div class="select-hand-container text-center">
+                    <button class="btn btn-info" ng-click="selectFirstHand()">X</button>
+                    <button class="btn btn-info" ng-click="selectSecondHand()">O</button>
+                    <button class="btn btn-danger" ng-click="reset()">Reset</button>
+                </div>
+            </div>
+            <div class="col-sm-3"></div>
         </div>
         <div class="game-board">
-
+            <div ng-repeat="num in nums" class="chess-block">
+                <chess-block position="num"></chess-block>
+            </div>
         </div>
 
     </div>
@@ -34,6 +48,5 @@
 <script src="js/aiController.js"></script>
 <script src="js/gameController.js"></script>
 <script src="directives/chessBlock.js"></script>
-<script src="directives/chessBlockRow.js"></script>
 
 </html>

@@ -21,7 +21,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
                 chessBoard[i] = 'empty';
             }
         }
-        return bestPossibleScore;
+        return gameResult;
     };
 
     //when the computer is 'o', decide what best possible result it can get in the current situation
@@ -44,7 +44,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
                 chessBoard[i] = 'empty';
             }
         }
-        return bestPossibleScore;
+        return gameResult;
     };
 
     // when computer is chosen to be 'x', how should it make its best next move
@@ -70,6 +70,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
         if(index > 1) {
             index = Math.floor(Math.random() * index) + 1;
         }
+        console.log(bestMoves);
         return bestMoves[index];
     };
 
@@ -96,6 +97,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
         if(index > 1) {
             index = Math.floor(Math.random() * index) + 1;
         }
+        console.log(bestMoves);
         return bestMoves[index];
     };
 
