@@ -3,8 +3,11 @@ gameApp.directive('chessBlock', function() {
         restrict: 'E',
         templateUrl: 'directives/chessBlock.html',
         replace: true,
+        controller: 'chessController',
         scope: {
             position: '=',
+            empty: '=',
+            currentChess: '='
         }
     }
 });

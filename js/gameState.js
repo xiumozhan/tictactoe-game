@@ -26,7 +26,10 @@ gameApp.service('gameState', function() {
         'gamePoint': 100,
     }
 
-    var stateEvaluate = function(chessBoard) {
+    var stateEvaluate = function(chessBoard, chessType) {
+        var empty = chessType.empty;
+        var firstHandChess = chessType.firstHandChess;
+        var secondHandChess = chessType.secondHandChess;
         var gameResult = results.inProgress;
         var isGameOver = true;
         var xCount = 0;
@@ -35,9 +38,9 @@ gameApp.service('gameState', function() {
 
         // check if game is over, i.e chessBoard is full
         for(var i = 0; i < chessBoard.length; i++) {
-            if(chessBoard[i] === 'empty') {
+            if(chessBoard[i] === empty) {
                 isGameOver = false;
-            } else if(chessBoard[i] === 'x') {
+            } else if(chessBoard[i] === firstHandChess) {
                 xCount++;
                 index = i;
             } else {
@@ -58,7 +61,7 @@ gameApp.service('gameState', function() {
         // check if 'x' win/lose
         for(var i = 0; i < winStatus.length; i++) {
             var checkingChess = chessBoard[winStatus[i][0]];
-            if(checkingChess === 'empty') {
+            if(checkingChess === empty) {
                 break;
             } else {
                 for(var j = 1; j < winStatus[i].length; j++) {
@@ -67,7 +70,7 @@ gameApp.service('gameState', function() {
                     }
                 }
                 if(j === winStatus[i].length) {
-                    if(checkingChess === 'x') {
+                    if(checkingChess === firstHandChess) {
                         gameResult = results.win;
                     } else {
                         gameResult = results.lose;
@@ -77,7 +80,7 @@ gameApp.service('gameState', function() {
             }
         }
 
-        if(gameResult !== 'win' && gameResult != 'lose') {
+        if(gameResult !== results.win && gameResult != results.lose) {
             if(isGameOver) {
                 gameResult = results.draw;
             } else {
@@ -86,13 +89,13 @@ gameApp.service('gameState', function() {
                 var oGamePoint = false;
                 for(var i = 0; i < winStatus.length; i++) {
                     var hasEmptySpace = false;
-                    var checkingChess = 'empty';
+                    var checkingChess = empty;
                     var count = 0;
                     for(var j = 0; j < winStatus[i].length; j++) {
-                        if(chessBoard[winStatus[i][j]] !== 'empty') {
+                        if(chessBoard[winStatus[i][j]] !== empty) {
                             hasEmptySpace = true;
                         } else {
-                            if(checkingChess === 'empty') {
+                            if(checkingChess === empty) {
                                 checkingChess = chessBoard[winStatus[i][j]];
                             }
                             if (chessBoard[winStatus[i][j]] === checkingChess) {
@@ -102,7 +105,7 @@ gameApp.service('gameState', function() {
                     }
                 }
                 if(hasEmptySpace && count) {
-                    if(checkingChess === 'x') {
+                    if(checkingChess === firstHandChess) {
                         xGamePoint = true;
                     } else {
                         oGamePoint = true;

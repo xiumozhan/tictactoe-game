@@ -1,11 +1,18 @@
 'use strict';
 
 gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', function($scope, gameState, aiController) {
+    $scope.chessType = {
+        empty: " ",
+        firstHandChess: "X",
+        secondHandChess: "O"
+    };
     $scope.nums = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    $scope.chessBoard = new Array(9).fill('empty');
+    $scope.chessBoard = new Array(9).fill($scope.chessType.empty);
     var firstHand = 'firstHand';
     var secondHand = 'secondHand';
-    $scope.position = 0;
+    $scope.position = {
+        position: undefined
+    };
     $scope.turn;
 
     $scope.gameMode = {
@@ -38,7 +45,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     };
 
     var selectHand = function() {
-        if($scope.selectedHand === 'firstHand') {
+        if($scope.selectedHand === firstHand) {
             if($scope.gameMode.humanToHuman) {
                 $scope.firstHandPlayer.human = true;
                 $scope.firstHandPlayer.computer = false;
@@ -50,7 +57,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
                 $scope.secondHandPlayer.human = false;
                 $scope.secondHandPlayer.computer = true;
             }
-        } else if ($scope.selectedHand === 'secondHand') {
+        } else if ($scope.selectedHand === secondHand) {
             if($scope.gameMode.humanToHuman) {
                 $scope.firstHandPlayer.human = true;
                 $scope.firstHandPlayer.computer = false;
@@ -63,7 +70,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
                 $scope.secondHandPlayer.computer = false;
             }
         }
-        $scope.turn = 'firstHand';
+        $scope.turn = firstHand;
     };
 
     $scope.selectFirstHand = function() {
@@ -88,51 +95,53 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     };
 
     //should be called only when it is human's turn
-    $scope.humanPlaceChess = function() {
-        if ($scope.turn === 'firstHand') {
-            if ($scope.chessBoard[$scope.position] === 'empty') {
-                $scope.chessBoard[$scope.position] = 'x';
-                $scope.gameStatus = gameState.getState($scope.chessBoard);
-                if(isGameOver()) {
-                    $scope.gameOver = true;
-                } else {
-                    $scope.turn = 'secondHand';
-                }
+    var humanPlaceChess = function() {
+        if ($scope.turn === firstHand) {
+            $scope.chessBoard[$scope.position.position] = $scope.chessType.firstHandChess;
+            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType);
+            if(isGameOver()) {
+                $scope.gameOver = true;
+            } else {
+                $scope.turn = secondHand;
             }
-        } else if ($scope.turn === 'secondHand') {
-            if ($scope.chessBoard[$scope.position] === 'empty') {
-                $scope.chessBoard[$scope.position] = 'o';
-                $scope.gameStatus = gameState.getState($scope.chessBoard);
-                if(isGameOver()) {
-                    $scope.gameOver = true;
-                } else {
-                    $scope.turn = 'firstHand';
-                }
+        } else if ($scope.turn === secondHand) {
+            $scope.chessBoard[$scope.position.position] = $scope.chessType.secondHandChess;
+            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType);
+            if(isGameOver()) {
+                $scope.gameOver = true;
+            } else {
+                $scope.turn = firstHand;
             }
         }
     };
 
-    var computerPlaceChess = function(move) {
-        if ($scope.turn === 'firstHand') {
-            $scope.chessBoard[move] = 'x';
-            $scope.turn = 'secondHand';
-        } else if ($scope.turn === 'secondHand') {
-            $scope.chessBoard[move] = 'o';
-            $scope.turn = 'firstHand';
+    $scope.$watch('position.position', function(newPosition, oldPosition) {
+        if(newPosition !== undefined && newPosition !== oldPosition) {
+            humanPlaceChess();
         }
-        $scope.gameStatus = gameState.getState($scope.chessBoard);
+    });
+
+    var computerPlaceChess = function(move) {
+        if ($scope.turn === firstHand) {
+            $scope.chessBoard[move] = $scope.chessType.firstHandChess;
+            $scope.turn = secondHand;
+        } else if ($scope.turn === secondHand) {
+            $scope.chessBoard[move] = $scope.chessType.secondHandChess;
+            $scope.turn = firstHand;
+        }
+        $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType);
     };
 
     $scope.$watch('turn', function(currTurn, prevTurn) {
-        if(currTurn === 'firstHand') {
+        if(currTurn === firstHand) {
             if($scope.firstHandPlayer.computer) {
-                var move = aiController.firstHandMove($scope.chessBoard, 6);
+                var move = aiController.firstHandMove($scope.chessBoard, 6, $scope.chessType);
                 computerPlaceChess(move);
                 console.log(move);
             }
-        } else if(currTurn === 'secondHand') {
+        } else if(currTurn === secondHand) {
             if($scope.secondHandPlayer.computer) {
-                var move = aiController.secondHandMove($scope.chessBoard, 6);
+                var move = aiController.secondHandMove($scope.chessBoard, 6, $scope.chessType);
                 computerPlaceChess(move);
                 console.log(move);
             }
@@ -161,7 +170,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
             computer: false
         };
 
-        $scope.chessBoard = new Array(9).fill('empty');
+        $scope.chessBoard = new Array(9).fill($scope.chessType.empty);
         $scope.turn = undefined;
         $scope.selectedHand = undefined;
         $scope.gameOver = false;
