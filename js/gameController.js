@@ -44,6 +44,8 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
         $scope.isGameModeSelected = true;
     };
 
+    $scope.isHandSelected = false;
+
     var selectHand = function() {
         if($scope.selectedHand === firstHand) {
             if($scope.gameMode.humanToHuman) {
@@ -70,6 +72,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
                 $scope.secondHandPlayer.computer = false;
             }
         }
+        $scope.isHandSelected = true;
         $scope.turn = firstHand;
     };
 
@@ -176,6 +179,8 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
         $scope.gameOver = false;
         $scope.gameStatus = gameState.resultMap.inProgress;
         $scope.isGameModeSelected = false;
+        $scope.isHandSelected = false;
+        $scope.position.position = undefined;
     };
 
 }]);
