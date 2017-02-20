@@ -1,6 +1,6 @@
 'use strict';
 
-gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', function($scope, gameState, aiController) {
+gameApp.controller('gameController', ['$scope', '$timeout', 'gameState', 'aiController', 'gameOverMessageService', function($scope, $timeout, gameState, aiController, gameOverMessageService) {
     $scope.chessType = {
         empty: " ",
         firstHandChess: "X",
@@ -47,25 +47,25 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     $scope.isHandSelected = false;
 
     var selectHand = function() {
-        if($scope.selectedHand === firstHand) {
-            if($scope.gameMode.humanToHuman) {
+        if ($scope.selectedHand === firstHand) {
+            if ($scope.gameMode.humanToHuman) {
                 $scope.firstHandPlayer.human = true;
                 $scope.firstHandPlayer.computer = false;
                 $scope.secondHandPlayer.human = true;
                 $scope.secondHandPlayer.computer = false;
-            } else if($scope.gameMode.humanToComputer) {
+            } else if ($scope.gameMode.humanToComputer) {
                 $scope.firstHandPlayer.human = true;
                 $scope.firstHandPlayer.computer = false;
                 $scope.secondHandPlayer.human = false;
                 $scope.secondHandPlayer.computer = true;
             }
         } else if ($scope.selectedHand === secondHand) {
-            if($scope.gameMode.humanToHuman) {
+            if ($scope.gameMode.humanToHuman) {
                 $scope.firstHandPlayer.human = true;
                 $scope.firstHandPlayer.computer = false;
                 $scope.secondHandPlayer.human = true;
                 $scope.secondHandPlayer.computer = false;
-            } else if($scope.gameMode.humanToComputer) {
+            } else if ($scope.gameMode.humanToComputer) {
                 $scope.firstHandPlayer.human = false;
                 $scope.firstHandPlayer.computer = true;
                 $scope.secondHandPlayer.human = true;
@@ -93,8 +93,8 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
 
     var isGameOver = function() {
         return ($scope.gameStatus === gameState.resultMap.win ||
-        $scope.gameStatus === gameState.resultMap.lose ||
-        $scope.gameStatus === gameState.resultMap.draw);
+            $scope.gameStatus === gameState.resultMap.lose ||
+            $scope.gameStatus === gameState.resultMap.draw);
     };
 
     //should be called only when it is human's turn
@@ -102,7 +102,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
         if ($scope.turn === firstHand) {
             $scope.chessBoard[$scope.position.position] = $scope.chessType.firstHandChess;
             $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType, true);
-            if(isGameOver()) {
+            if (isGameOver()) {
                 $scope.gameOver = true;
             } else {
                 $scope.turn = secondHand;
@@ -110,7 +110,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
         } else if ($scope.turn === secondHand) {
             $scope.chessBoard[$scope.position.position] = $scope.chessType.secondHandChess;
             $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType, false);
-            if(isGameOver()) {
+            if (isGameOver()) {
                 $scope.gameOver = true;
             } else {
                 $scope.turn = firstHand;
@@ -120,7 +120,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     };
 
     $scope.$watch('position.position', function(newPosition, oldPosition) {
-        if(newPosition !== undefined && newPosition !== oldPosition) {
+        if (newPosition !== undefined && newPosition !== oldPosition) {
             humanPlaceChess();
         }
     });
@@ -140,14 +140,14 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     };
 
     $scope.$watch('turn', function(currTurn, prevTurn) {
-        if(currTurn === firstHand) {
-            if($scope.firstHandPlayer.computer) {
+        if (currTurn === firstHand) {
+            if ($scope.firstHandPlayer.computer) {
                 var move = aiController.firstHandMove($scope.chessBoard, 6, $scope.chessType);
                 computerPlaceChess(move);
                 console.log(move);
             }
-        } else if(currTurn === secondHand) {
-            if($scope.secondHandPlayer.computer) {
+        } else if (currTurn === secondHand) {
+            if ($scope.secondHandPlayer.computer) {
                 var move = aiController.secondHandMove($scope.chessBoard, 6, $scope.chessType);
                 computerPlaceChess(move);
                 console.log(move);
@@ -156,13 +156,45 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     });
 
     $scope.$watch('gameOver', function(newValue, oldValue) {
-        if(newValue && !oldValue) {
-            $scope.reset();
+        if (newValue && !oldValue) {
+            if ($scope.gameStatus === gameState.resultMap.win) {
+                if ($scope.gameMode.humanToHuman) {
+                    $scope.message = 'Player 1 Won!';
+                } else if ($scope.firstHandPlayer.computer) {
+                    $scope.message = 'You Lost! My Algorithm Won!';
+                } else {
+                    $scope.message = "OK, You've Beaten My Stupid Algorithm";
+                }
+            } else if ($scope.gameStatus === gameState.resultMap.lose) {
+                if ($scope.gameMode.humanToHuman) {
+                    $scope.message = 'Player 2 Won!';
+                } else if ($scope.firstHandPlayer.computer) {
+                    $scope.message = "OK, You've Beaten My Stupid Algorithm";
+                } else {
+                    $scope.message = 'You Lost! My Algorithm Won!';
+                }
+            } else {
+                $scope.message = 'It\'s A Draw';
+            }
+
+            var modalOptions = {
+                actionButtonText: 'All Right',
+                headerText: 'Whoops, Seems This Game Is Over',
+                bodyText: $scope.message
+            };
+
+            $timeout(function() {
+                gameOverMessageService.showModal({}, modalOptions);
+            }, 1000);
+
+            $timeout(function() {
+                $scope.reset();
+            }, 3000);
         }
     });
 
     $scope.$watch('gameStatus', function(newStatus, oldStatus) {
-        if(isGameOver()) {
+        if (isGameOver()) {
             $scope.gameOver = true;
         }
     });
