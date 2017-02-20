@@ -6,7 +6,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
         var empty = chessType.empty;
         var firstHandChess = chessType.firstHandChess;
         var secondHandChess = chessType.secondHandChess;
-        var gameResult = gameState.getState(chessBoard, chessType, true);
+        var gameResult = gameState.getState(chessBoard, chessType, false);
         var isGameOver = (gameResult === gameState.resultMap.win) || (gameResult === gameState.resultMap.lose) || (gameResult === gameState.resultMap.draw);
         //beta cut off
         if(beta <= alpha) {
@@ -32,7 +32,7 @@ gameApp.service('aiController', ['gameState', function(gameState) {
         var empty = chessType.empty;
         var firstHandChess = chessType.firstHandChess;
         var secondHandChess = chessType.secondHandChess;
-        var gameResult = gameState.getState(chessBoard, chessType, false);
+        var gameResult = gameState.getState(chessBoard, chessType, true);
         var isGameOver = (gameResult === gameState.resultMap.win) || (gameResult === gameState.resultMap.lose) || (gameResult === gameState.resultMap.draw);
         //alpha cut off
         if(beta <= alpha) {
