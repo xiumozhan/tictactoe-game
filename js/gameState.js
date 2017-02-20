@@ -26,7 +26,7 @@ gameApp.service('gameState', function() {
         'gamePoint': 100,
     }
 
-    var stateEvaluate = function(chessBoard, chessType) {
+    var stateEvaluate = function(chessBoard, chessType, firstHand) {
         var empty = chessType.empty;
         var firstHandChess = chessType.firstHandChess;
         var secondHandChess = chessType.secondHandChess;
@@ -62,7 +62,7 @@ gameApp.service('gameState', function() {
         for(var i = 0; i < winStatus.length; i++) {
             var checkingChess = chessBoard[winStatus[i][0]];
             if(checkingChess === empty) {
-                break;
+                continue;
             } else {
                 for(var j = 1; j < winStatus[i].length; j++) {
                     if(checkingChess !== chessBoard[winStatus[i][j]]) {
@@ -92,10 +92,10 @@ gameApp.service('gameState', function() {
                     var checkingChess = empty;
                     var count = 0;
                     for(var j = 0; j < winStatus[i].length; j++) {
-                        if(chessBoard[winStatus[i][j]] !== empty) {
+                        if(chessBoard[winStatus[i][j]] === empty) {
                             hasEmptySpace = true;
                         } else {
-                            if(checkingChess === empty) {
+                            if (checkingChess === empty) {
                                 checkingChess = chessBoard[winStatus[i][j]];
                             }
                             if (chessBoard[winStatus[i][j]] === checkingChess) {
@@ -103,20 +103,33 @@ gameApp.service('gameState', function() {
                             }
                         }
                     }
+
+                    if(hasEmptySpace && count > 1) {
+                        if(checkingChess === firstHandChess) {
+                            xGamePoint = true;
+                        } else {
+                            oGamePoint = true;
+                        }
+                    }
                 }
-                if(hasEmptySpace && count) {
-                    if(checkingChess === firstHandChess) {
-                        xGamePoint = true;
-                    } else {
-                        oGamePoint = true;
+
+            }
+            if(xGamePoint || oGamePoint) {
+                if(firstHand) {
+                    if(xGamePoint && !oGamePoint) {
+                        gameResult = results.gamePoint;
+                    } else if(oGamePoint) {
+                        gameResult = -results.gamePoint;
+                    }
+                } else {
+                    if(!xGamePoint && oGamePoint) {
+                        gameResult = -results.gamePoint;
+                    } else if(xGamePoint) {
+                        gameResult = results.gamePoint;
                     }
                 }
             }
-            if(xGamePoint) {
-                gameResult = results.gamePoint;
-            } else if(oGamePoint) {
-                gameResult = -results.gamePoint;
-            }
+
         }
 
         return gameResult;

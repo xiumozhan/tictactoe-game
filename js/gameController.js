@@ -101,7 +101,7 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     var humanPlaceChess = function() {
         if ($scope.turn === firstHand) {
             $scope.chessBoard[$scope.position.position] = $scope.chessType.firstHandChess;
-            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType);
+            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType, true);
             if(isGameOver()) {
                 $scope.gameOver = true;
             } else {
@@ -109,13 +109,14 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
             }
         } else if ($scope.turn === secondHand) {
             $scope.chessBoard[$scope.position.position] = $scope.chessType.secondHandChess;
-            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType);
+            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType, false);
             if(isGameOver()) {
                 $scope.gameOver = true;
             } else {
                 $scope.turn = firstHand;
             }
         }
+        console.log('now the game status is: ', $scope.gameStatus);
     };
 
     $scope.$watch('position.position', function(newPosition, oldPosition) {
@@ -127,12 +128,15 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     var computerPlaceChess = function(move) {
         if ($scope.turn === firstHand) {
             $scope.chessBoard[move] = $scope.chessType.firstHandChess;
+            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType, true);
             $scope.turn = secondHand;
         } else if ($scope.turn === secondHand) {
             $scope.chessBoard[move] = $scope.chessType.secondHandChess;
+            $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType, false);
             $scope.turn = firstHand;
         }
-        $scope.gameStatus = gameState.getState($scope.chessBoard, $scope.chessType);
+
+        console.log('now the game status is: ', $scope.gameStatus);
     };
 
     $scope.$watch('turn', function(currTurn, prevTurn) {
@@ -154,6 +158,12 @@ gameApp.controller('gameController', ['$scope', 'gameState', 'aiController', fun
     $scope.$watch('gameOver', function(newValue, oldValue) {
         if(newValue && !oldValue) {
             $scope.reset();
+        }
+    });
+
+    $scope.$watch('gameStatus', function(newStatus, oldStatus) {
+        if(isGameOver()) {
+            $scope.gameOver = true;
         }
     });
 
