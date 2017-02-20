@@ -1,3 +1,5 @@
+'use strict';
+
 gameApp.service('gameOverMessageService', ['$uibModal', function($uibModal) {
     var modalDefaults = {
         backdrop: true,

@@ -1,3 +1,5 @@
+'use strict';
+
 gameApp.controller('chessController', ['$scope', function($scope) {
     $scope.placeChess = function() {
         if($scope.$parent.isGameModeSelected && $scope.$parent.isHandSelected) {
