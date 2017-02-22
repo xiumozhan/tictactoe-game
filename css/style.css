@@ -12,16 +12,24 @@
     margin-right: auto;
 }
 
-.select-hand-container button {
+.select-hand-container .col-sm-4 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.select-hand-container .col-sm-4 button {
     padding-left: 40px;
     padding-right: 40px;
-    margin-right: 30px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .game-mode-container button {
     padding-left: 30px;
     padding-right: 30px;
     margin-right: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .chess-block {

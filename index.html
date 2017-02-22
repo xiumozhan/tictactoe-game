@@ -30,10 +30,16 @@
         <div class="row" ng-show="isGameModeSelected">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
-                <div class="select-hand-container text-center">
-                    <button class="btn btn-info" ng-click="selectFirstHand()">X</button>
-                    <button class="btn btn-info" ng-click="selectSecondHand()">O</button>
-                    <button class="btn btn-danger" ng-click="reset()">Reset</button>
+                <div class="select-hand-container text-center row">
+                    <div class="col-sm-4">
+                        <button class="btn btn-info" ng-click="selectFirstHand()">X</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-info" ng-click="selectSecondHand()">O</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-danger" ng-click="reset()">Reset</button>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-3"></div>
