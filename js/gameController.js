@@ -47,33 +47,36 @@ gameApp.controller('gameController', ['$scope', '$timeout', 'gameState', 'aiCont
     $scope.isHandSelected = false;
 
     var selectHand = function() {
-        if ($scope.selectedHand === firstHand) {
-            if ($scope.gameMode.humanToHuman) {
-                $scope.firstHandPlayer.human = true;
-                $scope.firstHandPlayer.computer = false;
-                $scope.secondHandPlayer.human = true;
-                $scope.secondHandPlayer.computer = false;
-            } else if ($scope.gameMode.humanToComputer) {
-                $scope.firstHandPlayer.human = true;
-                $scope.firstHandPlayer.computer = false;
-                $scope.secondHandPlayer.human = false;
-                $scope.secondHandPlayer.computer = true;
+        if(!$scope.isHandSelected) {
+            if ($scope.selectedHand === firstHand) {
+                if ($scope.gameMode.humanToHuman) {
+                    $scope.firstHandPlayer.human = true;
+                    $scope.firstHandPlayer.computer = false;
+                    $scope.secondHandPlayer.human = true;
+                    $scope.secondHandPlayer.computer = false;
+                } else if ($scope.gameMode.humanToComputer) {
+                    $scope.firstHandPlayer.human = true;
+                    $scope.firstHandPlayer.computer = false;
+                    $scope.secondHandPlayer.human = false;
+                    $scope.secondHandPlayer.computer = true;
+                }
+            } else if ($scope.selectedHand === secondHand) {
+                if ($scope.gameMode.humanToHuman) {
+                    $scope.firstHandPlayer.human = true;
+                    $scope.firstHandPlayer.computer = false;
+                    $scope.secondHandPlayer.human = true;
+                    $scope.secondHandPlayer.computer = false;
+                } else if ($scope.gameMode.humanToComputer) {
+                    $scope.firstHandPlayer.human = false;
+                    $scope.firstHandPlayer.computer = true;
+                    $scope.secondHandPlayer.human = true;
+                    $scope.secondHandPlayer.computer = false;
+                }
             }
-        } else if ($scope.selectedHand === secondHand) {
-            if ($scope.gameMode.humanToHuman) {
-                $scope.firstHandPlayer.human = true;
-                $scope.firstHandPlayer.computer = false;
-                $scope.secondHandPlayer.human = true;
-                $scope.secondHandPlayer.computer = false;
-            } else if ($scope.gameMode.humanToComputer) {
-                $scope.firstHandPlayer.human = false;
-                $scope.firstHandPlayer.computer = true;
-                $scope.secondHandPlayer.human = true;
-                $scope.secondHandPlayer.computer = false;
-            }
+            $scope.isHandSelected = true;
+            $scope.turn = firstHand;
         }
-        $scope.isHandSelected = true;
-        $scope.turn = firstHand;
+
     };
 
     $scope.selectFirstHand = function() {
